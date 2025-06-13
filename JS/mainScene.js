@@ -8,6 +8,7 @@ export default class MainScene extends Phaser.Scene {
             frameHeight: 32
         });
        this.load.image('fishingHut', 'assets/bridge/Fishing_hut.png');
+       this.load.image('fisherman', 'assets/fisherman/GraveRobber_fish.png')
     }
     create () {
         this.anims.create({
@@ -63,6 +64,10 @@ export default class MainScene extends Phaser.Scene {
         const hutX = -10;
         const hutY = this.scale.height;
         this.hut = this.add.image(hutX, hutY, 'fishingHut').setOrigin(0, 1).setScale(2);
+
+        const fishermanX = 200;
+        const fishermanY = 480;
+        this.fisherman = this.add.image(fishermanX, fishermanY, 'fisherman').setOrigin(0, 1).setScale(2);
 
         });
     }
