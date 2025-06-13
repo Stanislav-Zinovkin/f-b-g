@@ -7,7 +7,7 @@ export default class MainScene extends Phaser.Scene {
             frameWidth: 32,
             frameHeight: 32
         });
-       
+       this.load.image('fishingHut', 'assets/bridge/Fishing_hut.png');
     }
     create () {
         this.anims.create({
@@ -58,8 +58,12 @@ export default class MainScene extends Phaser.Scene {
             fish.velocityY = Math.sin(angle) * speed;
             fish.setScale(Phaser.Math.FloatBetween(0.8, 1.4));
             this.fishes.push(fish);
-           
         }
+        
+        const hutX = -10;
+        const hutY = this.scale.height;
+        this.hut = this.add.image(hutX, hutY, 'fishingHut').setOrigin(0, 1).setScale(2);
+
         });
     }
     update (time, delta) {
