@@ -1,0 +1,26 @@
+{
+  "name": "f-b-g",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev" : "vite",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Stanislav-Zinovkin/f-b-g.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Stanislav-Zinovkin/f-b-g/issues"
+  },
+  "homepage": "https://github.com/Stanislav-Zinovkin/f-b-g#readme",
+  "dependencies": {
+    "phaser": "^3.90.0",
+    "vite": "^7.0.0"
+  }
+}
