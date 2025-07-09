@@ -61,23 +61,45 @@ export default class MainScene extends Phaser.Scene {
           .setAlpha(0);
     }
     
-    showCredits(text, duration = 4000) {
+    showCredits(text, duration = 4000, onComplete = null) {
         this.fadeOverlay.setAlpha(0);
         this.creditsText.setText(text);
         this.creditsText.setAlpha(0);
-
-        this.tweens.timeline({
-            targets: [this.fadeOverlay, this.creditsText],
-            tweens: [
-                {alpha: 0.8, duration: 1000, ease: 'Power1'},
-                {alpha: 0.8, duration: duration},
-                {alpha: 0.8, duration: 1000, ease: 'Power1'},
-            ],
-            onComplete: () => {
-                this.creditsText.setText('');
-            }
-        })
-    }
+      
+        
+        this.tweens.add({
+          targets: this.fadeOverlay,
+          alpha: 0.8,
+          duration: 1000,
+          onComplete: () => {
+            
+            this.tweens.add({
+              targets: this.creditsText,
+              alpha: 0.8,
+              duration: 1000,
+              onComplete: () => {
+                
+                this.time.delayedCall(duration, () => {
+                  this.tweens.add({
+                    targets: this.creditsText,
+                    alpha: 0,
+                    duration: 1000,
+                  });
+                  this.tweens.add({
+                    targets: this.fadeOverlay,
+                    alpha: 0,
+                    duration: 1000,
+                    onComplete: () => {
+                      this.creditsText.setText('');
+                      if (onComplete) onComplete();
+                    }
+                  });
+                });
+              }
+            });
+          }
+        });
+      }
     createFishAnimations() {
         this.anims.create({ key: 'fish-blue', frames: this.anims.generateFrameNumbers('fishAtlas', { start: 0, end: 2 }), frameRate: 6, repeat: -1 });
         this.anims.create({ key: 'fish-grey', frames: this.anims.generateFrameNumbers('fishAtlas', { start: 3, end: 5 }), frameRate: 6, repeat: -1 });
@@ -237,7 +259,7 @@ export default class MainScene extends Phaser.Scene {
                         strokeThickness: 3,
                     });
 
-                    this.wishTimer = this.time.delayedCall(7000, () => {
+                    this.wishTimer = this.time.delayedCall(4000, () => {
                         if (this.wishText){
                             this.wishText.destroy();
                             this.wishText = null;
@@ -247,7 +269,7 @@ export default class MainScene extends Phaser.Scene {
     
                     if (this.fishCaughtCount >= this.fishes.length) {
                         
-                        this.showCredits('Усі риби спіймані! 🎉\nАвтори ідеї : Містер Стракт, Тьотя Шані\nЗа реалізація відповідали: Всі')
+                        this.showCredits('Усі риби спіймані! 🎉\nЗ днем народження тебе наша красуня\nАвтори ідеї : Містер Стракт, Тьотя Шані\nЗа реалізація відповідали: Всі')
                     
                         this.createPlayAgainButton();
                     }
