@@ -8,6 +8,7 @@ export default class MainScene extends Phaser.Scene {
         this.catchText = null;
         this.fishCaughtCount = 0;
         this.caughtFish = null;
+        this.availableWishes = [];
     }
 
     preload() {
@@ -45,9 +46,13 @@ export default class MainScene extends Phaser.Scene {
         this.spawnFish();
         this.createFisherman();
         this.setupInput();
-        this.fadeOverlay = this.add.rectangle(0, 0, this.scale.width, this.scale.height, 0x000000, 0)
+        this.availableWishes = [...wish];
+        const width = this.cameras.main.width;
+        const height = this.cameras.main.height;
+        this.fadeOverlay = this.add.rectangle(0, 0, this.cameras.main.width, this.cameras.main.height, 0x000000, 0)
          .setOrigin(0, 0)
-         .setDepth(100);
+         .setDepth(100)
+         .setAlpha(0);
         this.creditsText = this.add.text(this.scale.width / 2, this.scale.height / 2, '', {
             fontSize: '32px',
             fill: '#ffffff',
@@ -61,8 +66,10 @@ export default class MainScene extends Phaser.Scene {
           .setAlpha(0);
     }
     
-    showCredits(text, duration = 4000, onComplete = null) {
+    showCredits(text, duration = 15000, onComplete = null) {
+        this.fadeOverlay.setVisible(true);
         this.fadeOverlay.setAlpha(0);
+        this.fadeOverlay.setFillStyle(0x000000, 1);
         this.creditsText.setText(text);
         this.creditsText.setAlpha(0);
       
@@ -252,11 +259,13 @@ export default class MainScene extends Phaser.Scene {
                         this.wishTimer.remove();
                         this.wishTimer = null;
                     }
-                    this.wishText = this.add.text(250, 300, message, {
+                    this.wishText = this.add.text(250, 250, message, {
                         fontSize: '24px',
                         fill: '#ffffff',
                         stroke: '#000',
                         strokeThickness: 3,
+                        align: 'center',
+
                     });
 
                     this.wishTimer = this.time.delayedCall(4000, () => {
@@ -268,8 +277,37 @@ export default class MainScene extends Phaser.Scene {
                     })
     
                     if (this.fishCaughtCount >= this.fishes.length) {
+                        if (this.availableWishes.length === 0) {
+    this.availableWishes = [...wish];
+}
+
+const randomIndex = Phaser.Math.Between(0, this.availableWishes.length - 1);
+const message = this.availableWishes[randomIndex];
+this.availableWishes.splice(randomIndex, 1);
+
+if (this.wishText) {
+    this.wishText.destroy();
+    this.wishText = null;
+}
+if (this.wishTimer) {
+    this.wishTimer.remove();
+    this.wishTimer = null;
+}
+this.wishText = this.add.text(250, 300, message, {
+    fontSize: '24px',
+    fill: '#ffffff',
+    stroke: '#000',
+    strokeThickness: 3,
+});
+this.wishTimer = this.time.delayedCall(4000, () => {
+    if (this.wishText) {
+        this.wishText.destroy();
+        this.wishText = null;
+    }
+    this.wishTimer = null;
+});
                         
-                        this.showCredits('Усі риби спіймані! 🎉\nЗ днем народження тебе наша красуня\nАвтори ідеї : Містер Стракт, Тьотя Шані\nЗа реалізація відповідали: Всі')
+                        this.showCredits('Усі риби спіймані! 🎉\nЗ днем народження тебе наша красуня🎉🎉🎉\nМи тебе дуже сильно любимо❤️\nАвтори ідеї : Містер Старк, Тьотя Шані\nЗа реалізація відповідали: Всі')
                     
                         this.createPlayAgainButton();
                     }

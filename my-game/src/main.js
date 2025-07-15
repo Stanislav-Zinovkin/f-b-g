@@ -4,7 +4,7 @@ const config = {
     type: Phaser.AUTO,
     width: 800,
     height: 600,
-    backgroundColor: '#1e90ff',
+    backgroundColor: 'rgba(56,105,146,255)',
     scene: [mainScene],
     pixelArt: true,
     physics:{
